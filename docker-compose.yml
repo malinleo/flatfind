@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgis/postgis:18-3.7
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      POSTGRES_USER: flatfind
+      POSTGRES_PASSWORD: flatfind
+      POSTGRES_DB: flatfind
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flatfind -d flatfind"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgis_data:
